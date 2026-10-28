@@ -4,6 +4,7 @@ let dropMaker; // Will store our timer that creates drops regularly
 const timer = document.getElementById("time");
 let timeValue = timer.textContent;
 const scoreLabel = document.getElementById("score");
+const gameContainer = document.getElementById("game-container");
 let scoreVal = 0;
 const messageLabel = document.getElementById("message");
 const winThreshold = 20;
@@ -50,16 +51,17 @@ function createDrop() {
   drop.style.width = drop.style.height = `${size}px`;
 
   // Position the drop randomly across the game width
-  // Subtract 60 pixels to keep drops fully inside the container
-  const gameWidth = document.getElementById("game-container").offsetWidth;
-  const xPosition = Math.random() * (gameWidth - 60);
+  // Keep drops fully inside the container at every size.
+  const gameWidth = gameContainer.clientWidth;
+  const xPosition = Math.random() * Math.max(0, gameWidth - size);
   drop.style.left = xPosition + "px";
+  drop.style.setProperty("--fall-distance", `${gameContainer.clientHeight}px`);
 
   // Make drops fall for 4 seconds
   drop.style.animationDuration = "3s";
 
   // Add the new drop to the game screen
-  document.getElementById("game-container").appendChild(drop);
+  gameContainer.appendChild(drop);
 
   // clicking the drops
   drop.addEventListener("click", clickDrop);
